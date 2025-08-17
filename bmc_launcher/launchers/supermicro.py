@@ -1,4 +1,3 @@
-import sys
 import logging
 
 from bmc_launcher.model.configuration import Server
@@ -11,25 +10,24 @@ from selenium.webdriver.support import expected_conditions as EC
 log = logging.getLogger(__name__)
 
 
-class HPELauncher(BaseLauncher):
+class SupermicroLauncher(BaseLauncher):
     def __init__(self, host: Server, driver):
         super().__init__(host, driver)
 
     def launch(self):
         super().launch()
         self.webdriver.get(self.url)
-        try:
-            iframe = WebDriverWait(self.webdriver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "iframe")))
-            self.webdriver.switch_to.frame(iframe)
 
+        try:
             username_input = WebDriverWait(self.webdriver, 10).until(
-                EC.visibility_of_element_located((By.ID, "usernameInput"))
+                EC.visibility_of_element_located((By.NAME, "name"))
             )
+
             username_input.send_keys(self.username)
-            password_input = self.webdriver.find_element(By.ID, "passwordInput")
+            password_input = self.webdriver.find_element(By.NAME, "pwd")
             password_input.send_keys(self.password)
 
-            self.webdriver.find_element(By.ID, "ID_LOGON").click()
+            self.webdriver.find_element(By.ID, "login_word").click()
             log.info("Login submitted.")
         except (TimeoutException, NoSuchElementException) as e:
             log.error(f"Login page interaction failed: {e}")

@@ -1,5 +1,9 @@
+import logging
+
 from abc import ABC, abstractmethod
 from bmc_launcher.model.configuration import Server
+
+log = logging.getLogger(__name__)
 
 
 class BaseLauncher(ABC):
@@ -12,4 +16,5 @@ class BaseLauncher(ABC):
 
     @abstractmethod
     def launch(self):
+        log.info(f"Launching browser to access {self.name} at {self.url}")
         pass
