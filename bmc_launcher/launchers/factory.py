@@ -1,10 +1,12 @@
 from bmc_launcher.model.configuration import Server
 from bmc_launcher.launchers.hpe import HPELauncher
+from bmc_launcher.launchers.supermicro import SupermicroLauncher
 
 
 def SeleniumFactory(server: Server, driver):
     launchers = {
         ("HPE", 4): HPELauncher,
+        ("SUPERMICRO", None): SupermicroLauncher,
     }
 
     manufacturer = server.manufacturer.upper()
