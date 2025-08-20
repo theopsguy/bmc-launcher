@@ -1,9 +1,10 @@
-import sys
 import logging
-
+import sys
 from pathlib import Path
-from ruamel.yaml import YAML
+
 from pydantic import ValidationError
+from ruamel.yaml import YAML
+
 from bmc_launcher.model.configuration import Configuration as ConfigurationModel
 
 log = logging.getLogger(__name__)

@@ -1,6 +1,6 @@
-from bmc_launcher.model.configuration import Server
 from bmc_launcher.launchers.hpe import HPELauncher
 from bmc_launcher.launchers.supermicro import SupermicroLauncher
+from bmc_launcher.model.configuration import Server
 
 
 def SeleniumFactory(server: Server, driver):

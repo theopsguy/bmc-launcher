@@ -1,12 +1,13 @@
-import sys
 import logging
+import sys
 
-from bmc_launcher.model.configuration import Server
-from bmc_launcher.launchers.abstract import BaseLauncher
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
-from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
+
+from bmc_launcher.launchers.abstract import BaseLauncher
+from bmc_launcher.model.configuration import Server
 
 log = logging.getLogger(__name__)
 
