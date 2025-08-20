@@ -1,4 +1,5 @@
 import logging
+import sys
 
 from bmc_launcher.model.configuration import Server
 from bmc_launcher.launchers.abstract import BaseLauncher
