@@ -1,6 +1,6 @@
 import logging
-
 from abc import ABC, abstractmethod
+
 from bmc_launcher.model.configuration import Server
 
 log = logging.getLogger(__name__)

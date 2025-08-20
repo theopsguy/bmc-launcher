@@ -1,10 +1,11 @@
-import sys
 import argparse
 import logging
-
-from os.path import expanduser
-from ruamel.yaml import YAML
+import sys
 from io import StringIO
+from os.path import expanduser
+
+from ruamel.yaml import YAML
+
 from bmc_launcher.configuration import Configuration
 from bmc_launcher.launchers.factory import SeleniumFactory
 from bmc_launcher.web_drivers.factory import WebDriverFactory
