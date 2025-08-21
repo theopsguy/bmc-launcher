@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 
@@ -25,6 +25,7 @@ def mock_webdriver():
 
 def test_chrome_webdriver_init_default(mock_chrome_service, mock_chrome_options, mock_webdriver):
     driver = ChromeWebDriver()
+    assert isinstance(driver, ChromeWebDriver)
     mock_chrome_options.return_value.add_experimental_option.assert_called_once_with("detach", True)
     mock_chrome_options.return_value.add_argument.assert_not_called()
     mock_webdriver.Chrome.assert_called_once()
@@ -32,6 +33,7 @@ def test_chrome_webdriver_init_default(mock_chrome_service, mock_chrome_options,
 
 def test_chrome_webdriver_init_ignore_certs(mock_chrome_service, mock_chrome_options, mock_webdriver):
     driver = ChromeWebDriver(ignore_cert_errors=True)
+    assert isinstance(driver, ChromeWebDriver)
     mock_chrome_options.return_value.add_experimental_option.assert_called_once_with("detach", True)
     mock_chrome_options.return_value.add_argument.assert_called_once_with("--ignore-certificate-errors")
     mock_webdriver.Chrome.assert_called_once()
