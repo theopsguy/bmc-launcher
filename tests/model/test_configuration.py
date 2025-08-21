@@ -44,7 +44,7 @@ def test_server_enum_validation(manufacturer, should_error):
                 manufacturer=manufacturer,
             )
     else:
-        server = Server(
+        Server(
             name="test_server",
             url="https://1.2.3.4",
             manufacturer=manufacturer,

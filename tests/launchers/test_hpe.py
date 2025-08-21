@@ -3,7 +3,6 @@ from unittest.mock import MagicMock, patch
 import pytest
 from pydantic import SecretStr
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.by import By
 
 from bmc_launcher.launchers.hpe import HPELauncher
 from bmc_launcher.model.configuration import Credentials, Manufacturer, Server

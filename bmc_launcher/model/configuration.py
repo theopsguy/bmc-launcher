@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Annotated, Dict, List, Literal, Optional, Union
 
-from pydantic import BaseModel, ConfigDict, Field, SecretStr, field_serializer, field_validator
+from pydantic import BaseModel, ConfigDict, Field, SecretStr, field_serializer
 
 
 class BaseConfigModel(BaseModel):
