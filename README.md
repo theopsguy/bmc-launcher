@@ -11,7 +11,7 @@ A command-line utility that uses Selenium WebDriver to launch a browser, navigat
 
 1. Clone the repository
     ```
-    git clone https://github.com/pritpal-sabharwal/bmc-launcher.git
+    git clone https://github.com/theopsguy/bmc-launcher.git
     cd bmc-launcher
     ```
 
