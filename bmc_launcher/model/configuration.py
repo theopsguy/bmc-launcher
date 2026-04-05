@@ -30,9 +30,19 @@ class Server(BaseConfigModel):
     credentials: Optional[Credentials] = None
 
     def get_credentials(self, default_credentials: Dict[Manufacturer, Credentials]) -> Credentials:
-        if self.credentials and self.credentials.username and self.credentials.password:
+        if self.credentials:
+            if not self.credentials.username or not self.credentials.password:
+                raise ValueError(
+                    f"Server '{self.name}' has partial credentials: both username and password must be set"
+                )
             return self.credentials
-        return default_credentials.get(self.manufacturer, Credentials())
+
+        if self.manufacturer not in default_credentials:
+            raise ValueError(
+                f"Server '{self.name}' has no credentials and no default credentials for {self.manufacturer.value}"
+            )
+
+        return default_credentials[self.manufacturer]
 
 
 class DellServer(Server):
