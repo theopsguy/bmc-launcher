@@ -7,7 +7,7 @@ from os.path import expanduser
 from ruamel.yaml import YAML
 
 from bmc_launcher.configuration import Configuration
-from bmc_launcher.launchers.factory import SeleniumFactory
+from bmc_launcher.launchers.factory import create_launcher
 from bmc_launcher.web_drivers.factory import WebDriverFactory
 
 log = logging.getLogger(__name__)
@@ -88,8 +88,16 @@ def main():
         sys.exit(1)
 
     driver = WebDriverFactory(args.driver, args.ignore_cert_errors)
-    selenium_controller = SeleniumFactory(host, driver.get_webdriver())
-    selenium_controller.launch()
+
+    try:
+        launcher = create_launcher(host, driver.get_webdriver())
+        launcher.launch()
+    except ValueError as e:
+        log.error(e)
+        sys.exit(1)
+    except Exception:
+        log.exception("Failed to launch BMC console:")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

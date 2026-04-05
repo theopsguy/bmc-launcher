@@ -29,6 +29,10 @@ class Server(BaseConfigModel):
     manufacturer: Manufacturer
     credentials: Optional[Credentials] = None
 
+    @property
+    def bmc_version(self) -> Optional[int]:
+        return None
+
     def get_credentials(self, default_credentials: Dict[Manufacturer, Credentials]) -> Credentials:
         if self.credentials:
             if not self.credentials.username or not self.credentials.password:
@@ -49,10 +53,18 @@ class DellServer(Server):
     manufacturer: Literal[Manufacturer.dell]
     idrac_version: int
 
+    @property
+    def bmc_version(self) -> int:
+        return self.idrac_version
+
 
 class HPEServer(Server):
     manufacturer: Literal[Manufacturer.hpe]
     ilo_version: int
+
+    @property
+    def bmc_version(self) -> int:
+        return self.ilo_version
 
 
 class SupermicroServer(Server):
