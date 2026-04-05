@@ -11,6 +11,16 @@ from bmc_launcher.model.configuration import (
 )
 
 
+def make_server(**overrides):
+    defaults = {"name": "web00", "url": "https://192.168.0.10", "manufacturer": Manufacturer.hpe}
+    return Server(**{**defaults, **overrides})
+
+
+def make_default_credentials(**overides):
+    defaults = {Manufacturer.hpe: Credentials(username="default", password=SecretStr("defaultpw"))}
+    return {**defaults, **overides}
+
+
 @pytest.mark.parametrize(
     "username,password,expected",
     [
@@ -75,6 +85,30 @@ def test_get_credentials_uses_default_if_missing():
     creds = server.get_credentials(default_creds)
     assert creds.username == "default"
     assert creds.password.get_secret_value() == "defaultpw"
+
+
+@pytest.mark.parametrize(
+    "username,password",
+    [("admin", None), (None, SecretStr("defaultpw")), ("admin", "")],
+)
+def test_get_credentials_partial_credentials(username, password):
+    default_creds = make_default_credentials()
+    server = make_server(credentials=Credentials(username=username, password=password))
+    with pytest.raises(ValueError):
+        server.get_credentials(default_creds)
+
+
+def test_get_credentials_no_default_for_manufacturer():
+    default_creds = {Manufacturer.dell: Credentials(username="root", password=SecretStr("dellpass"))}
+    server = make_server()
+    with pytest.raises(ValueError):
+        server.get_credentials(default_creds)
+
+
+def test_get_credentials_no_default_no_server_creds():
+    server = make_server()
+    with pytest.raises(ValueError):
+        server.get_credentials({})
 
 
 def test_configuration_mode_empty_hosts():
