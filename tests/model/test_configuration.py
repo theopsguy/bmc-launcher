@@ -37,51 +37,33 @@ def test_credentials_mask_password(username, password, expected):
 
 
 @pytest.mark.parametrize(
-    "manufacturer,should_error",
-    [
-        ("DELL", False),
-        ("HPE", False),
-        ("SUPERMICRO", False),
-        ("UNKNOWN", True),
-    ],
+    "manufacturer",
+    ["DELL", "HPE", "SUPERMICRO"],
 )
-def test_server_enum_validation(manufacturer, should_error):
-    if should_error:
-        with pytest.raises(ValidationError):
-            Server(
-                name="test_server",
-                url="https://1.2.3.4",
-                manufacturer=manufacturer,
-            )
-    else:
-        Server(
-            name="test_server",
-            url="https://1.2.3.4",
-            manufacturer=manufacturer,
-        )
+def test_server_accepts_valid_manufacturer(manufacturer):
+    make_server(manufacturer=manufacturer)
+
+
+@pytest.mark.parametrize(
+    "manufacturer",
+    ["UNKNOWN", ""],
+)
+def test_server_rejects_invalid_manufacturer(manufacturer):
+    with pytest.raises(ValidationError):
+        make_server(manufacturer=manufacturer)
 
 
 def test_get_credentials_prefers_server_over_default():
-    default_creds = {Manufacturer.hpe: Credentials(username="default", password=SecretStr("defaultpw"))}
-    server = Server(
-        name="web00",
-        url="https://192.168.1.10",
-        manufacturer=Manufacturer.hpe,
-        credentials=Credentials(username="admin", password=SecretStr("pw")),
-    )
+    default_creds = make_default_credentials()
+    server = make_server(credentials=Credentials(username="admin", password=SecretStr("pw")))
     creds = server.get_credentials(default_creds)
     assert creds.username == "admin"
     assert creds.password.get_secret_value() == "pw"
 
 
 def test_get_credentials_uses_default_if_missing():
-    default_creds = {Manufacturer.hpe: Credentials(username="default", password=SecretStr("defaultpw"))}
-    server = Server(
-        name="web00",
-        url="https://192.168.1.10",
-        manufacturer=Manufacturer.hpe,
-        credentials=None,
-    )
+    default_creds = make_default_credentials()
+    server = make_server()
     creds = server.get_credentials(default_creds)
     assert creds.username == "default"
     assert creds.password.get_secret_value() == "defaultpw"
