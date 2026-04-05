@@ -80,11 +80,12 @@ def main():
         log.error(f"Host '{args.host}' not found in configuration.")
         sys.exit(1)
 
-    credentials = host.get_credentials(config.default_credentials)
-    if not credentials:
-        log.error(f"No credentials found for host '{args.host}'.")
+    try:
+        credentials = host.get_credentials(config.default_credentials)
+        host.credentials = credentials
+    except ValueError as e:
+        log.error(e)
         sys.exit(1)
-    host.credentials = credentials
 
     driver = WebDriverFactory(args.driver, args.ignore_cert_errors)
     selenium_controller = SeleniumFactory(host, driver.get_webdriver())
