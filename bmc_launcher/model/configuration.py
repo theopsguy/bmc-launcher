@@ -23,14 +23,11 @@ class Manufacturer(str, Enum):
     supermicro = "SUPERMICRO"
 
 
-class Server(BaseModel):
+class Server(BaseConfigModel):
     name: str
     url: str
     manufacturer: Manufacturer
     credentials: Optional[Credentials] = None
-
-    class Config:
-        use_enum_values = True
 
     def get_credentials(self, default_credentials: Dict[Manufacturer, Credentials]) -> Credentials:
         if self.credentials and self.credentials.username and self.credentials.password:
