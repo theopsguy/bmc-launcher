@@ -11,11 +11,6 @@ log = logging.getLogger(__name__)
 
 
 class Configuration:
-
-    @staticmethod
-    def is_file(file_path: str) -> bool:
-        return Path(file_path).is_file()
-
     def __init__(self, config_path: str):
         if not self.is_file(config_path):
             raise FileNotFoundError(f"Configuration file not found: {config_path}")
@@ -27,15 +22,27 @@ class Configuration:
             log.error(f"Configuration validation error: {e}")
             sys.exit(1)
 
-    @staticmethod
-    def _load(config_path: str) -> dict:
+    def _load(self, config_path: str) -> dict:
         log.debug("Loading configuration from %s", config_path)
         with open(config_path, "r") as file:
             data = YAML(typ="safe").load(file)
             if not data:
                 raise ValueError(f"Configuration file '{config_path}' is empty or invalid.")
 
-            return data
+            return self._normalize(data)
+
+    @staticmethod
+    def is_file(file_path: str) -> bool:
+        return Path(file_path).is_file()
+
+    @staticmethod
+    def _normalize(data: dict) -> dict:
+        if "default_credentials" in data:
+            data["default_credentials"] = {k.upper(): v for k, v in data["default_credentials"].items()}
+        for host in data.get("hosts", []):
+            if isinstance(host, dict) and "manufacturer" in host:
+                host["manufacturer"] = host["manufacturer"].upper()
+        return data
 
     def get_host_by_name(self, name: str):
         return next((h for h in self.hosts if h.name == name), None)

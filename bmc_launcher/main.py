@@ -44,7 +44,7 @@ def list_hosts(config: Configuration):
         log.info("No hosts defined in the configuration.")
         return
 
-    hosts_data = [host.model_dump() for host in config.hosts]
+    hosts_data = [host.model_dump(mode="json", exclude_none=True) for host in config.hosts]
 
     yaml = YAML()
     yaml.indent(sequence=4, offset=2)
