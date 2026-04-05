@@ -4,7 +4,7 @@ import pytest
 from pydantic import SecretStr
 from selenium.common.exceptions import TimeoutException
 
-from bmc_launcher.launchers.hpe import HPELauncher
+from bmc_launcher.launchers.hpe_ilo4 import HPEIlo4Launcher
 from bmc_launcher.model.configuration import Credentials, Manufacturer, Server
 
 
@@ -18,7 +18,7 @@ def server():
     )
 
 
-@patch("bmc_launcher.launchers.hpe.WebDriverWait")
+@patch("bmc_launcher.launchers.hpe_ilo4.WebDriverWait")
 def test_hpe_launcher_launch_success(mock_webdriver_wait, server):
     driver = MagicMock()
     iframe = MagicMock()
@@ -29,7 +29,7 @@ def test_hpe_launcher_launch_success(mock_webdriver_wait, server):
     mock_webdriver_wait.return_value.until.side_effect = [iframe, username_input]
     driver.find_element.side_effect = [password_input, login_button]
 
-    launcher = HPELauncher(server, driver)
+    launcher = HPEIlo4Launcher(server, driver)
     launcher.launch()
 
     driver.get.assert_called_with("https://1.2.3.4")
@@ -40,12 +40,12 @@ def test_hpe_launcher_launch_success(mock_webdriver_wait, server):
     login_button.click.assert_called_once()
 
 
-@patch("bmc_launcher.launchers.hpe.WebDriverWait")
+@patch("bmc_launcher.launchers.hpe_ilo4.WebDriverWait")
 def test_hpe_launcher_timeout(mock_wait, server):
     driver = MagicMock()
     mock_wait.return_value.until.side_effect = TimeoutException("Timeout occurred")
 
-    launcher = HPELauncher(server, driver)
+    launcher = HPEIlo4Launcher(server, driver)
     with patch("sys.exit") as mock_exit:
         launcher.launch()
         mock_exit.assert_called_with(1)

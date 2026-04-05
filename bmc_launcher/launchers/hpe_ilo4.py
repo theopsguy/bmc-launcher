@@ -12,7 +12,7 @@ from bmc_launcher.model.configuration import Server
 log = logging.getLogger(__name__)
 
 
-class HPELauncher(BaseLauncher):
+class HPEIlo4Launcher(BaseLauncher):
     def __init__(self, host: Server, driver):
         super().__init__(host, driver)
 
