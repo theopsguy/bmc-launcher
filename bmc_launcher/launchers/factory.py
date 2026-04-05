@@ -1,12 +1,12 @@
 from bmc_launcher.launchers.dell_idrac8 import DellIdrac8Launcher
 from bmc_launcher.launchers.dell_idrac9 import DellIdrac9Launcher
-from bmc_launcher.launchers.hpe import HPELauncher
+from bmc_launcher.launchers.hpe_ilo4 import HPEIlo4Launcher
 from bmc_launcher.launchers.supermicro import SupermicroLauncher
 from bmc_launcher.model.configuration import DellServer, HPEServer, Server, SupermicroServer
 
 LAUNCHER_REGISTRY = {
     HPEServer: {
-        4: HPELauncher,
+        4: HPEIlo4Launcher,
     },
     DellServer: {
         8: DellIdrac8Launcher,
