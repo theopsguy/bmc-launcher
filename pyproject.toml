@@ -1,14 +1,24 @@
 [tool.poetry]
 name = "bmc-launcher"
 version = "0.1.0"
-description = ""
+description = "A utility for launching BMC interfaces"
 authors = ["Pritpal Sabharwal <pritpal@theopsguy.co.uk>"]
 readme = "README.md"
+license = "GPL-3.0"
+homepage = "https://github.com/theopsguy/bmc-launcher"
+repository = "https://github.com/theopsguy/bmc-launcher"
+keywords = ["bmc", "idrac", "ilo", "ipmi", "supermicro", "selenium"]
+packages = [{include = "bmc_launcher"}]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+[tool.poetry.scripts]
+bmc-launcher = "bmc_launcher.main:main"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-ansible = "^11.1.0"
-ansible-core = "^2.18.1"
 webdriver-manager = "^4.0.2"
 selenium = "^4.27.1"
 ruamel-yaml = "^0.18.6"
