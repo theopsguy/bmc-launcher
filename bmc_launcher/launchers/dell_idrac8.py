@@ -22,11 +22,11 @@ class DellIdrac8Launcher(BaseLauncher):
 
         try:
             WebDriverWait(self.webdriver, 30).until(EC.visibility_of_element_located((By.ID, "user")))
-            username = self.webdriver.find_element("id", "user")
-            password = self.webdriver.find_element("id", "password")
+            username_input = self.webdriver.find_element("id", "user")
+            password_input = self.webdriver.find_element("id", "password")
 
-            username.send_keys(self.username)
-            password.send_keys(self.password)
+            username_input.send_keys(self.username)
+            password_input.send_keys(self.password)
 
             WebDriverWait(self.webdriver, 30).until(EC.visibility_of_element_located((By.ID, "btnOK")))
             self.webdriver.find_element("id", "btnOK").click()
