@@ -4,10 +4,19 @@ A command-line utility that uses Selenium WebDriver to launch a browser, navigat
 
 ## Installation
 
-1. Create a virtualenv (recommended)
-    ```
-    python3 -m venv ~/bmc_launcher && source ~/bmc_launcher/bin/activate
-    ```
+Install with [pipx](https://pipx.pypa.io/stable/how-to/install-pipx.html) (recommended). This installs `bmc-launcher` in an isolated environment and puts it on your `PATH`:
+
+```
+pipx install bmc-launcher
+```
+
+Alternatively, install with pip:
+
+```
+pip3 install bmc-launcher
+```
+
+### Development setup
 
 1. Clone the repository
     ```
@@ -15,9 +24,14 @@ A command-line utility that uses Selenium WebDriver to launch a browser, navigat
     cd bmc-launcher
     ```
 
-1. Install dependencies and utility:
+1. Install dependencies with [Poetry](https://python-poetry.org/):
     ```
     pip3 install poetry && poetry install
+    ```
+
+1. Run the tool via Poetry:
+    ```
+    poetry run bmc-launcher -l
     ```
 
 ## Configuration
@@ -37,24 +51,32 @@ default_credentials:
     username: root
     password: dellpass
 
-servers:
+hosts:
   - name: web00
-    ip: 192.168.1.10
-    manufacturer: HPE
+    url: https://192.168.1.10
+    manufacturer: hpe
+    ilo_version: 4
   - name: db00
-    ip: 192.168.1.11
+    url: https://192.168.1.11
     manufacturer: dell
+    idrac_version: 9
     credentials:
       username: specialuser
       password: otherpass
 ```
+
+- `HPE` hosts require `ilo_version`
+- `DELL` hosts require `idrac_version`
+- `SUPERMICRO` hosts need neither. 
+
+Currently supported versions are iLO 4 and iDRAC 8/9.
 
 ## Usage
 
 - List hosts defined in the configuration:
 
 ```
-% python3 bmc_launcher/main.py -l
+% bmc-launcher -l
   - name: web00
     url: https://192.168.1.10
     manufacturer: HPE
@@ -76,7 +98,22 @@ servers:
 - Launch BMC:
 
 ```
-python3 bmc_launcher/main.py -H web00 -i
+bmc-launcher -H web00 -i
 ```
 
-Note, `-i` disables certificate validation.
+### Options
+
+| Flag | Description |
+| --- | --- |
+| `-H`, `--host` | Host name to launch, as defined in the configuration |
+| `-l`, `--list-hosts` | List all available hosts |
+| `-d`, `--driver` | Web driver to use (default: `chrome`) |
+| `-i`, `--ignore-cert-errors` | Ignore SSL certificate errors |
+| `-c`, `--config` | Path to the configuration file (default: `~/.bmc_launcher/config.yaml`) |
+| `-v`, `--verbose` | Enable verbose logging |
+
+## Roadmap
+
+- Support loading hosts from an Ansible dynamic inventory, as an alternative to the static `config.yaml` file.
+
+For other ideas or in-progress work, see the [GitHub issues](https://github.com/theopsguy/bmc-launcher/issues).
